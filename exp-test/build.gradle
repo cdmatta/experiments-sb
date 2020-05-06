@@ -1,0 +1,23 @@
+plugins {
+    id 'java-library'
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+
+dependencies {
+    api platform(project(':exp-dependencies'))
+
+    implementation 'org.projectlombok:lombok'
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    testImplementation 'org.projectlombok:lombok'
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    api('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
