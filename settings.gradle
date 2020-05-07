@@ -2,3 +2,4 @@ rootProject.name = "experiments-java"
 
 include "exp-platform"
 include "exp-test"
+include "projects:sam"

@@ -8,4 +8,7 @@ javaPlatform {
 
 dependencies {
     api platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+    constraints {
+        api "commons-io:commons-io:${commonsIoVersion}"
+    }
 }

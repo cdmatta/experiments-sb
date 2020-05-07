@@ -3,6 +3,7 @@ plugins {
 }
 
 ext {
+    commonsIoVersion = '2.6'
     lombokVersion = '1.18.12' // For annotation processing
     springBootVersion = '2.2.7.RELEASE'
 }
