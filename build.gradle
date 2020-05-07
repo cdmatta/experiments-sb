@@ -4,7 +4,7 @@ plugins {
 
 ext {
     lombokVersion = '1.18.12' // For annotation processing
-    springBootVersion = '2.2.6.RELEASE'
+    springBootVersion = '2.2.7.RELEASE'
 }
 
 allprojects {
