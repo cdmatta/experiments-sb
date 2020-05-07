@@ -1,4 +1,4 @@
-rootProject.name = "experiment"
+rootProject.name = "experiments-java"
 
-include "exp-dependencies"
+include "exp-platform"
 include "exp-test"
