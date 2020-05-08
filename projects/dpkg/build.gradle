@@ -13,7 +13,8 @@ dependencies {
     runtimeOnly 'org.springframework.boot:spring-boot-devtools'
     implementation 'org.apache.commons:commons-lang3'
 
-    implementation 'org.webjars:angularjs:1.6.4'
-    implementation 'org.webjars:bootstrap:3.3.7'
-    implementation 'org.webjars:lodash:4.17.4'
+    implementation 'org.webjars.npm:vue:2.6.11'
+    implementation 'org.webjars:bootstrap:4.4.1-1'
+    implementation 'org.webjars.npm:axios:0.19.2'
+    implementation 'org.webjars:lodash:4.17.15'
 }

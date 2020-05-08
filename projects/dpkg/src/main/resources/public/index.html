@@ -1,66 +1,68 @@
 <!doctype html>
-<html lang="en" ng-app="dpkgStatus">
+<html lang="en">
+
 <head>
     <meta charset="utf-8">
     <title>dpkg Status</title>
 
-    <script src="/webjars/angularjs/1.6.4/angular.min.js"></script>
-    <script src="/webjars/angularjs/1.6.4/angular-resource.min.js"></script>
-    <script src="/webjars/lodash/4.17.4/lodash.min.js"></script>
-    <link rel="stylesheet" type="text/css"
-          href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css">
-
-    <script src="/js/app.js"></script>
+    <script src="/webjars/vue/2.6.11/dist/vue.min.js"></script>
+    <script src="/webjars/axios/0.19.2/dist/axios.min.js"></script>
+    <script src="/webjars/lodash/4.17.15/lodash.js"></script>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.4.1-1/css/bootstrap.min.css">
 </head>
 
 <body style="padding-top:10px">
-<div ng-controller="DpkgResourceCtrl" class="container">
-    <div class="col-md-4">
-        <form>
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                    <input type="text" class="form-control" placeholder="Search" ng-model="searchString">
-                </div>
+    <div id="app" class="container">
+        <div class="row">
+            <div class="col-4">
+                <form>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                            <input type="text" class="form-control" placeholder="Search" v-model="searchString">
+                        </div>
+                    </div>
+                </form>
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <td>Package Name</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="p in packagesDisplayList">
+                            <td><a href="javascript:void(0);"
+                                    v-on:click="updatePackageSelection(p.name)">{{ p.name }}</a></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </form>
-        <table class="table table-bordered table-striped table-hover">
-            <thead>
-            <tr>
-                <td>
-                    Package Name
-                </td>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="p in packages | orderBy:'name' | filter:searchString">
-                <td><a href="" ng-click="updatePackageSelection(p.name)">{{ p.name }}</a></td>
-            </tr>
-            </tbody>
-        </table>
+            <div class="col-8">
+                <span v-if="!selectedPackage">
+                    <h2>Select a package from the list</h2>
+                </span>
+                <span v-if="!!selectedPackage">
+                    <h1>{{ selectedPackage.name }}</h1>
+                    <p>{{ selectedPackage.description }}</p>
+                    <h3>Upstream dependencies</h3>
+                    <ul>
+                        <li v-for="(k, v) in selectedPackage.upstreamDependencies">
+                            <a v-if="k==true" href="javascript:void(0);"
+                                v-on:click="updatePackageSelection(v)">{{ v }}</a>
+                            <span v-if="k==false">{{ v }}</span>
+                        </li>
+                    </ul>
+                    <h3>Downstream dependencies</h3>
+                    <ul>
+                        <li v-for="f in selectedPackage.downStreamDependencies">
+                            <a href="javascript:void(0);" v-on:click="updatePackageSelection(f)">{{ f }}</a>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+        </div>
     </div>
-    <div class="col-md-8">
-			<span ng-if="!selectedPackage">
-				<h2>Select a package from the list</h2>
-			</span>
-        <span ng-if="!!selectedPackage">
-				<h1>{{ selectedPackage.name }}</h1>
-				<p>{{ selectedPackage.description }}</p>
-				<h3>Upstream dependencies</h3>
-				<ul>
-					<li ng-repeat="(k,v) in selectedPackage.upstreamDependencies">
-						<a ng-if="v==true" href="" ng-click="updatePackageSelection(k)">{{ k }}</a>
-						<span ng-if="v==false">{{ k }}</span>
-					</li>
-				</ul>
-				<h3>Downstream dependencies</h3>
-				<ul>
-					<li ng-repeat="f in selectedPackage.downStreamDependencies">
-						<a href="" ng-click="updatePackageSelection(f)">{{ f }}</a>
-					</li>
-				</ul>
-			</span>
-    </div>
-</div>
+    <script src="/js/app.js"></script>
 </body>
+
 </html>
