@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit {
     this.filteredServices = this.monitoredServices;
   }
 
-  searchFilterChanged(filterText) {
+  searchFilterChanged(filterText: string) {
     this.searchString = filterText;
     if (!filterText) {
         this.filteredServices = this.monitoredServices;
