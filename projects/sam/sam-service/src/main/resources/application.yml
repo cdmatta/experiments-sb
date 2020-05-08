@@ -3,13 +3,13 @@ monitoring-settings:
   time-out-for-poll-request-seconds: 5
 
 web-pages:
-  - url: http://start.spring.io/
-    mandatory-content: "Secure your application"
-  - url: https://facebook.github.io/react/
+  - url: https://start.spring.io/
+    # no content check
+  - url: https://reactjs.org/
     mandatory-content: "painless"
   - url: https://angular.io/
     mandatory-content: "One framework."
   - url: https://www.oracle.com/
-    mandatory-content: "unmatched content by charandeep test."
+    mandatory-content: "make content matching fail"
   - url: https://somerandomnotavailablesite.com/
     mandatory-content: "content does not matter here"
