@@ -1,0 +1,38 @@
+<div class="container">
+    <form>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-search"></i>
+                </div>
+                <input type="text" class="form-control" name="searchString" placeholder="Search filter" [ngModel]="searchString" (ngModelChange)="searchFilterChanged($event)">
+            </div>
+        </div>
+    </form>
+    <table class="table table-bordered table-striped table-hover table-sm">
+        <thead>
+            <tr>
+                <td>
+                    URL
+                </td>
+                <td>
+                    Recent Failure Count
+                </td>
+                <td>
+                    Down since
+                </td>
+                <td>
+                    Last failure reason
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let s of filteredServices | sortBy: 'recentFailureCount'" [ngClass]="{'table-danger': s.recentFailureCount > 0 }">
+                <td>{{ s.url }}</td>
+                <td>{{ s.recentFailureCount }}</td>
+                <td>{{ s.downSince }}</td>
+                <td>{{ s.lastFailureDetail }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
