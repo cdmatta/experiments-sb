@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+
+dependencies {
+    implementation platform(project(':exp-platform'))
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    runtimeOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.apache.commons:commons-lang3'
+
+    implementation 'org.webjars:angularjs:1.6.4'
+    implementation 'org.webjars:bootstrap:3.3.7'
+    implementation 'org.webjars:lodash:4.17.4'
+}

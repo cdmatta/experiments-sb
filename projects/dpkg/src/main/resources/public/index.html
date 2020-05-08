@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" ng-app="dpkgStatus">
+<head>
+    <meta charset="utf-8">
+    <title>dpkg Status</title>
+
+    <script src="/webjars/angularjs/1.6.4/angular.min.js"></script>
+    <script src="/webjars/angularjs/1.6.4/angular-resource.min.js"></script>
+    <script src="/webjars/lodash/4.17.4/lodash.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script src="/js/app.js"></script>
+</head>
+
+<body style="padding-top:10px">
+<div ng-controller="DpkgResourceCtrl" class="container">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                    <input type="text" class="form-control" placeholder="Search" ng-model="searchString">
+                </div>
+            </div>
+        </form>
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+                <td>
+                    Package Name
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="p in packages | orderBy:'name' | filter:searchString">
+                <td><a href="" ng-click="updatePackageSelection(p.name)">{{ p.name }}</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-8">
+			<span ng-if="!selectedPackage">
+				<h2>Select a package from the list</h2>
+			</span>
+        <span ng-if="!!selectedPackage">
+				<h1>{{ selectedPackage.name }}</h1>
+				<p>{{ selectedPackage.description }}</p>
+				<h3>Upstream dependencies</h3>
+				<ul>
+					<li ng-repeat="(k,v) in selectedPackage.upstreamDependencies">
+						<a ng-if="v==true" href="" ng-click="updatePackageSelection(k)">{{ k }}</a>
+						<span ng-if="v==false">{{ k }}</span>
+					</li>
+				</ul>
+				<h3>Downstream dependencies</h3>
+				<ul>
+					<li ng-repeat="f in selectedPackage.downStreamDependencies">
+						<a href="" ng-click="updatePackageSelection(f)">{{ f }}</a>
+					</li>
+				</ul>
+			</span>
+    </div>
+</div>
+</body>
+</html>
