@@ -16,7 +16,7 @@ import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 @Component
 public class StatusFileReader {
 
-    private Map<String, DPackage> installedPackages;
+    private final Map<String, DPackage> installedPackages;
 
     public StatusFileReader() {
         installedPackages = readInstalledPackages();

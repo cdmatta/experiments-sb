@@ -40,7 +40,7 @@ public class FixedClockListenerTest {
     @Mock
     private Clock mockedClock;
 
-    private FixedClockListener listener = new FixedClockListener();
+    private final FixedClockListener listener = new FixedClockListener();
 
     @BeforeEach
     public void beforeEach() {
@@ -54,7 +54,7 @@ public class FixedClockListenerTest {
     }
 
     @Test
-    public void shouldDoNothing_WithoutClassAnnotation_OnBeforeTestClass() throws Exception {
+    public void shouldDoNothing_WithoutClassAnnotation_OnBeforeTestClass() {
         WithoutFixedClockAnnotation instance = new WithoutFixedClockAnnotation();
         listener.beforeTestClass(mockTestClassContext(instance));
         assertThat(mockedClock.instant()).isNull();
@@ -62,7 +62,7 @@ public class FixedClockListenerTest {
     }
 
     @Test
-    public void shouldDoNothing_WithoutClassAnnotation_OnAfterTestClass() throws Exception {
+    public void shouldDoNothing_WithoutClassAnnotation_OnAfterTestClass() {
         WithoutFixedClockAnnotation instance = new WithoutFixedClockAnnotation();
         when(mockedClock.getZone()).thenReturn(DEFAULT_TIMEZONE);
         listener.afterTestClass(mockTestClassContext(instance));
@@ -72,7 +72,7 @@ public class FixedClockListenerTest {
     @Test
     public void shouldDoNothing_WithoutClassAnnotation_OnBeforeTestMethod() throws Exception {
         WithoutFixedClockAnnotation instance = new WithoutFixedClockAnnotation();
-        listener.beforeTestMethod(mockTestMethodContext(instance, "aMethod"));
+        listener.beforeTestMethod(mockTestMethodContext(instance));
         assertThat(mockedClock.instant()).isNull();
         assertThat(mockedClock.getZone()).isNull();
     }
@@ -80,7 +80,7 @@ public class FixedClockListenerTest {
     @Test
     public void shouldDoNothing_WithoutClassAnnotation_OnAfterTestMethod() throws Exception {
         WithoutFixedClockAnnotation instance = new WithoutFixedClockAnnotation();
-        listener.afterTestMethod(mockTestMethodContext(instance, "aMethod"));
+        listener.afterTestMethod(mockTestMethodContext(instance));
         assertThat(mockedClock.instant()).isNull();
         assertThat(mockedClock.getZone()).isNull();
     }
@@ -93,16 +93,16 @@ public class FixedClockListenerTest {
     }
 
     @Test
-    public void shouldThrowException_WhenOnlyMethodIsAnnotated_OnBeforeTestMethod() throws Exception {
+    public void shouldThrowException_WhenOnlyMethodIsAnnotated_OnBeforeTestMethod() {
         FixedClockOnlyMethodAnnotated instance = new FixedClockOnlyMethodAnnotated();
-        assertThatThrownBy(() -> listener.beforeTestMethod(mockTestMethodContext(instance, "aMethod")))
+        assertThatThrownBy(() -> listener.beforeTestMethod(mockTestMethodContext(instance)))
                 .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
-    public void shouldThrowException_WhenOnlyMethodIsAnnotated_OnAfterTestMethod() throws Exception {
+    public void shouldThrowException_WhenOnlyMethodIsAnnotated_OnAfterTestMethod() {
         FixedClockOnlyMethodAnnotated instance = new FixedClockOnlyMethodAnnotated();
-        assertThatThrownBy(() -> listener.afterTestMethod(mockTestMethodContext(instance, "aMethod")))
+        assertThatThrownBy(() -> listener.afterTestMethod(mockTestMethodContext(instance)))
                 .isInstanceOf(IllegalStateException.class);
     }
 
@@ -114,7 +114,7 @@ public class FixedClockListenerTest {
     }
 
     @Test
-    public void shouldSetUpMockedClock_OnBeforeTestClass() throws Exception {
+    public void shouldSetUpMockedClock_OnBeforeTestClass() {
         WithFixedClockClassAnnotation instance = new WithFixedClockClassAnnotation();
         listener.beforeTestClass(mockTestClassContext(instance));
         assertThat(mockedClock.instant()).isEqualTo(DEFAULT_INSTANT);
@@ -122,7 +122,7 @@ public class FixedClockListenerTest {
     }
 
     @Test
-    public void shouldResetMock_OnAfterTestClass() throws Exception {
+    public void shouldResetMock_OnAfterTestClass() {
         WithFixedClockClassAnnotation instance = new WithFixedClockClassAnnotation();
         when(mockedClock.getZone()).thenReturn(DEFAULT_TIMEZONE);
         listener.afterTestClass(mockTestClassContext(instance));
@@ -140,7 +140,7 @@ public class FixedClockListenerTest {
     @Test
     public void shouldSetUpMockedClock_WithAnnotatedMethodValue_OnBeforeTestMethod() throws Exception {
         WithFixedClockClassAndMethodAnnotation instance = new WithFixedClockClassAndMethodAnnotation();
-        listener.beforeTestMethod(mockTestMethodContext(instance, "aMethod"));
+        listener.beforeTestMethod(mockTestMethodContext(instance));
         assertThat(mockedClock.instant()).isEqualTo(Instant.parse(INSTANT_STRING));
         assertThat(mockedClock.getZone()).isEqualTo(DEFAULT_TIMEZONE);
     }
@@ -149,7 +149,7 @@ public class FixedClockListenerTest {
     @Test
     public void shouldSetUpMock_WithAnnotatedClassValue_OnAfterTestMethod() throws Exception {
         WithFixedClockClassAndMethodAnnotation instance = new WithFixedClockClassAndMethodAnnotation();
-        listener.afterTestMethod(mockTestMethodContext(instance, "aMethod"));
+        listener.afterTestMethod(mockTestMethodContext(instance));
         assertThat(mockedClock.instant()).isEqualTo(DEFAULT_INSTANT);
         assertThat(mockedClock.getZone()).isEqualTo(DEFAULT_TIMEZONE);
     }
@@ -162,9 +162,9 @@ public class FixedClockListenerTest {
         return testContext;
     }
 
-    private TestContext mockTestMethodContext(Object instance, String methodName) throws Exception {
+    private TestContext mockTestMethodContext(Object instance) throws Exception {
         TestContext testContext = mockTestClassContext(instance);
-        when(testContext.getTestMethod()).thenReturn(instance.getClass().getDeclaredMethod(methodName));
+        when(testContext.getTestMethod()).thenReturn(instance.getClass().getDeclaredMethod("aMethod"));
         return testContext;
     }
 }
