@@ -1,0 +1,3 @@
+opensky:
+  base-url: https://opensky-network.org/api
+  all-states: /states/all

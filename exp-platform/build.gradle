@@ -10,5 +10,6 @@ dependencies {
     api platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     constraints {
         api "commons-io:commons-io:${commonsIoVersion}"
+        api "org.apache.commons:commons-csv:${commonsCsvVersion}"
     }
 }
