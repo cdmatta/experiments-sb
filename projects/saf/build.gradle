@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+
+dependencies {
+    implementation platform(project(':exp-platform'))
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    runtimeOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-starter-activemq'
+    implementation 'org.apache.activemq:activemq-pool'
+    implementation 'org.apache.activemq:activemq-jaas'
+    implementation 'org.apache.activemq:activemq-kahadb-store'
+    implementation 'org.apache.commons:commons-lang3'
+}

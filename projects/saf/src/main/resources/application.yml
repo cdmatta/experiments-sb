@@ -1,0 +1,9 @@
+saf:
+  broker-url: nio://localhost:61616
+  kaha-db-path: /tmp/saf-kaha-db
+  user:
+    username: foo
+    password: bar
+  admin:
+    username: admin
+    password: XERPgYCMUd5b9js
