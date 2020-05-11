@@ -100,7 +100,7 @@ public class BrokerConfiguration {
         List<DestinationMapEntry> authorizationEntries = new ArrayList<>();
 
         AuthorizationEntry safQueueEntry = new AuthorizationEntry();
-        safQueueEntry.setQueue(SafProperties.SAF_QUEUE_NAME);
+        safQueueEntry.setQueue(SafProperties.DATA_QUEUE_NAME);
         safQueueEntry.setRead(ADMIN_GROUP);
         safQueueEntry.setWrite(PRODUCER_GROUP + "," + ADMIN_GROUP); // Anyone can dispatch a message
         safQueueEntry.setAdmin(ADMIN_GROUP);

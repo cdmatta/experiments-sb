@@ -10,7 +10,7 @@ import javax.jms.JMSException;
 import javax.jms.TextMessage;
 import java.util.Optional;
 
-import static com.github.cdmatta.experiment.saf.config.SafProperties.SAF_QUEUE_NAME;
+import static com.github.cdmatta.experiment.saf.config.SafProperties.DATA_QUEUE_NAME;
 
 @Service
 @Slf4j
@@ -19,7 +19,7 @@ public class JmsEventListener {
 
     private final EventDispatcher eventDispatcher;
 
-    @JmsListener(destination = SAF_QUEUE_NAME)
+    @JmsListener(destination = DATA_QUEUE_NAME)
     public void receive(TextMessage event) throws JMSException {
         log.debug("Received event={}", event);
 

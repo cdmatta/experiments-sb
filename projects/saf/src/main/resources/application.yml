@@ -7,3 +7,12 @@ saf:
   admin:
     username: admin
     password: XERPgYCMUd5b9js
+
+management:
+  endpoints.web.exposure.include: health,info,prometheus
+  endpoint.health.show-details: ALWAYS
+  metrics.enable:
+    jvm: false
+    tomcat: false
+    process: false
+    system: false

@@ -15,7 +15,7 @@ import java.util.Optional;
 @ConfigurationProperties(prefix = "saf")
 public class SafProperties {
 
-    public static final String SAF_QUEUE_NAME = "saf-queue";
+    public static final String DATA_QUEUE_NAME = "saf-data-queue";
     public static final String DLQ_NAME = "ActiveMq.DLQ";
 
     @NotBlank
@@ -29,7 +29,7 @@ public class SafProperties {
     private String kahaDbPath;
 
     private int listenerMaxConcurrency = 20;
-    private int queueMaxMessageCount = 10_000_000;
+    private int dataQueueMaxMessageCount = 10_000_000;
     private int dlqMaxMessageCount = 5_000;
 
     @Min(50)

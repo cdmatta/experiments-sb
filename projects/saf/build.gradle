@@ -16,4 +16,7 @@ dependencies {
     implementation 'org.apache.activemq:activemq-jaas'
     implementation 'org.apache.activemq:activemq-kahadb-store'
     implementation 'org.apache.commons:commons-lang3'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
 }

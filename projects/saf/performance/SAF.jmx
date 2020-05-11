@@ -31,7 +31,7 @@
           <stringProp name="jms.initial_context_factory">org.apache.activemq.jndi.ActiveMQInitialContextFactory</stringProp>
           <stringProp name="jms.provider_url">nio://localhost:61616</stringProp>
           <stringProp name="jms.connection_factory">ConnectionFactory</stringProp>
-          <stringProp name="jms.topic">dynamicQueues/saf-queue</stringProp>
+          <stringProp name="jms.topic">dynamicQueues/saf-data-queue</stringProp>
           <stringProp name="jms.expiration"></stringProp>
           <stringProp name="jms_error_reconnect_on_codes"></stringProp>
           <stringProp name="jms.priority"></stringProp>
