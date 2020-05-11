@@ -16,7 +16,7 @@ import java.util.Optional;
 public class SafProperties {
 
     public static final String DATA_QUEUE_NAME = "saf-data-queue";
-    public static final String DLQ_NAME = "ActiveMq.DLQ";
+    public static final String DLQ_NAME = "ActiveMQ.DLQ";
 
     @NotBlank
     private String brokerUrl;
@@ -50,9 +50,6 @@ public class SafProperties {
         @NotBlank
         private String password;
     }
-
-
-    // TODO ALERTING CONFIG private long diskThreshold = DataSize.ofGigabytes(10).toBytes();
 
 
     @Data

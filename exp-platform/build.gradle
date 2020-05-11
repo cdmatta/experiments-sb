@@ -8,7 +8,9 @@ javaPlatform {
 
 dependencies {
     api platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+    api platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
     constraints {
         api "commons-io:commons-io:${commonsIoVersion}"
+        api "io.rest-assured:rest-assured:${restAssuredVersion}"
     }
 }

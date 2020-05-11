@@ -22,6 +22,8 @@ import javax.jms.ConnectionFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.cdmatta.experiment.saf.config.SafProperties.DATA_QUEUE_NAME;
+import static com.github.cdmatta.experiment.saf.config.SafProperties.DLQ_NAME;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.ArrayUtils.nullToEmpty;
 
@@ -100,14 +102,14 @@ public class BrokerConfiguration {
         List<DestinationMapEntry> authorizationEntries = new ArrayList<>();
 
         AuthorizationEntry safQueueEntry = new AuthorizationEntry();
-        safQueueEntry.setQueue(SafProperties.DATA_QUEUE_NAME);
+        safQueueEntry.setQueue(DATA_QUEUE_NAME);
         safQueueEntry.setRead(ADMIN_GROUP);
         safQueueEntry.setWrite(PRODUCER_GROUP + "," + ADMIN_GROUP); // Anyone can dispatch a message
         safQueueEntry.setAdmin(ADMIN_GROUP);
         authorizationEntries.add(safQueueEntry);
 
         AuthorizationEntry dlqEntry = new AuthorizationEntry();
-        dlqEntry.setQueue(SafProperties.DLQ_NAME);
+        dlqEntry.setQueue(DLQ_NAME);
         dlqEntry.setRead(ADMIN_GROUP);
         dlqEntry.setWrite(ADMIN_GROUP);
         dlqEntry.setAdmin(ADMIN_GROUP);
