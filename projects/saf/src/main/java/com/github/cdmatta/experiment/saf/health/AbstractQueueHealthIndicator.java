@@ -2,7 +2,6 @@ package com.github.cdmatta.experiment.saf.health;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.broker.BrokerService;
-import org.apache.activemq.broker.region.Destination;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.store.MessageStore;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
@@ -13,13 +12,13 @@ import org.springframework.util.Assert;
 public abstract class AbstractQueueHealthIndicator extends AbstractHealthIndicator {
     private final MessageStore messageStore;
     private final int maxMessageCount;
-    private String queueName;
+    private final String queueName;
 
     protected AbstractQueueHealthIndicator(BrokerService brokerService, String queueName, int maxMessageCount) throws Exception {
         this.queueName = queueName;
         this.maxMessageCount = maxMessageCount;
 
-        Destination destination = brokerService.getDestination(new ActiveMQQueue((queueName)));
+        var destination = brokerService.getDestination(new ActiveMQQueue((queueName)));
         Assert.notNull(destination, "Queue " + queueName + " does not exist");
 
         this.messageStore = destination.getMessageStore();
@@ -28,7 +27,7 @@ public abstract class AbstractQueueHealthIndicator extends AbstractHealthIndicat
 
     @Override
     protected void doHealthCheck(Health.Builder builder) throws Exception {
-        int currentMessageCount = messageStore.getMessageCount();
+        var currentMessageCount = messageStore.getMessageCount();
         builder.withDetail("current_message_count", currentMessageCount)
                 .withDetail("maximum_message_count", maxMessageCount)
                 .withDetail("current_message_size", messageStore.getMessageSize())

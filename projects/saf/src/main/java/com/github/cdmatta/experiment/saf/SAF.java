@@ -9,7 +9,7 @@ import static org.springframework.boot.Banner.Mode.OFF;
 public class SAF {
 
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(SAF.class);
+        var app = new SpringApplication(SAF.class);
         app.setBannerMode(OFF);
         app.run(args);
     }

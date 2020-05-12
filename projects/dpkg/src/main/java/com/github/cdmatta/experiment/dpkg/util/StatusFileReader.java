@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static java.nio.file.Files.readAllLines;
@@ -26,13 +25,13 @@ public class StatusFileReader {
     private Map<String, DPackage> readInstalledPackages() {
         try {
             Map<String, DPackage> installedPackages = new HashMap<>();
-            String paramValue = "";
-            String paramName = "";
-            String currentPackage = "";
-            String currentField = "";
-            String currentValue = "";
-            List<String> dpkgStatusLines = readAllLines(get("/var/lib/dpkg/status"));
-            for (String line : dpkgStatusLines) {
+            var paramValue = "";
+            var paramName = "";
+            var currentPackage = "";
+            var currentField = "";
+            var currentValue = "";
+            var dpkgStatusLines = readAllLines(get("/var/lib/dpkg/status"));
+            for (var line : dpkgStatusLines) {
                 if (line.startsWith(" ")) {
                     currentValue += line;
                     continue;
@@ -40,12 +39,12 @@ public class StatusFileReader {
                 if (isBlank(line)) {
                     continue;
                 }
-                String[] split = line.split(":", 2);
+                var split = line.split(":", 2);
                 paramName = split[0];
                 paramValue = split[1];
 
                 if ("Package".equals(paramName)) {
-                    DPackage p = new DPackage();
+                    var p = new DPackage();
                     currentPackage = trimToEmpty(paramValue);
                     p.setName(currentPackage);
                     installedPackages.put(currentPackage, p);
@@ -68,15 +67,14 @@ public class StatusFileReader {
 
     private void populateDependencyMetaData() {
         installedPackages.forEach((name, dpkg) -> {
-            Map<String, Boolean> upstream = dpkg.getUpstreamDependencies();
+            var upstream = dpkg.getUpstreamDependencies();
             upstream.keySet().forEach(requiredPackageName -> {
-                DPackage requiredPackage = installedPackages.get(requiredPackageName);
+                var requiredPackage = installedPackages.get(requiredPackageName);
                 if (requiredPackage != null) {
                     requiredPackage.getDownStreamDependencies().add(name);
                     upstream.put(requiredPackageName, true);
                 }
             });
-            ;
         });
     }
 

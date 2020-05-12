@@ -36,11 +36,11 @@ public class SiteAvailabilityJob {
     @Scheduled(cron = "${monitoring-settings.polling-frequency-cron-expression}")
     public void pollServices() {
         try {
-            LocalDateTime monitoringStartTime = now();
+            var monitoringStartTime = now();
             Map<HttpService, Future<Boolean>> serviceStatusMap = new HashMap<>();
             startParallelVerification(serviceStatusMap);
             sleepToAllowMaxResponseTimeOut();
-            boolean allServicesAreUp = aggregateResultsAndReturnOverallStatus(serviceStatusMap,
+            var allServicesAreUp = aggregateResultsAndReturnOverallStatus(serviceStatusMap,
                     monitoringStartTime);
             if (allServicesAreUp) {
                 log.info("---- Overall Result . Services are UP ----");
@@ -53,15 +53,15 @@ public class SiteAvailabilityJob {
     }
 
     private void startParallelVerification(Map<HttpService, Future<Boolean>> serviceStatusMap) {
-        int timeout = monitoringSettings.getTimeOutForPollRequestSeconds();
-        for (HttpService service : webpages) {
+        var timeout = monitoringSettings.getTimeOutForPollRequestSeconds();
+        for (var service : webpages) {
             serviceStatusMap.put(service, verificationService.isServiceRunning(service, timeout));
         }
     }
 
     private void sleepToAllowMaxResponseTimeOut() {
         try {
-            int secondsToSleep = monitoringSettings.getTimeOutForPollRequestSeconds();
+            var secondsToSleep = monitoringSettings.getTimeOutForPollRequestSeconds();
             log.debug("Sleeping {} seconds to allow verifications to finish", secondsToSleep);
             sleep(secondsToSleep * 1000);
         } catch (InterruptedException ignored) {

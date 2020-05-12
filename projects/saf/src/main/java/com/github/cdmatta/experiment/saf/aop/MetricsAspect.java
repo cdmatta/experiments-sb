@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.broker.BrokerService;
-import org.apache.activemq.broker.region.Destination;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.store.MessageStore;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -54,12 +53,12 @@ public class MetricsAspect implements MeterBinder {
     }
 
     private void createGaugesForQueue(String queueName, String queueMetricId, int maxMessageCount) throws Exception {
-        MessageStore messageStore = getStoreForQueue(brokerService, queueName);
-        String prefix = "saf." + queueMetricId;
+        var messageStore = getStoreForQueue(brokerService, queueName);
+        var prefix = "saf." + queueMetricId;
         Gauge.builder(prefix + ".status", messageStore, store -> getStatus(store, maxMessageCount)).register(registry);
         Gauge.builder(prefix + ".max.message.count", messageStore, store -> maxMessageCount).register(registry);
-        Gauge.builder(prefix + ".current.message.count", messageStore, store -> getMessageCount(store)).register(registry);
-        Gauge.builder(prefix + ".current.message.size", messageStore, store -> getMessageSize(store)).register(registry);
+        Gauge.builder(prefix + ".current.message.count", messageStore, this::getMessageCount).register(registry);
+        Gauge.builder(prefix + ".current.message.size", messageStore, this::getMessageSize).register(registry);
     }
 
     @SneakyThrows
@@ -74,7 +73,7 @@ public class MetricsAspect implements MeterBinder {
 
     @SneakyThrows
     private double getStatus(MessageStore store, int maxMessageCount) {
-        int currentMessageCount = store.getMessageCount();
+        var currentMessageCount = store.getMessageCount();
         if (currentMessageCount < maxMessageCount) {
             return 1;
         }
@@ -82,24 +81,24 @@ public class MetricsAspect implements MeterBinder {
     }
 
     private MessageStore getStoreForQueue(BrokerService brokerService, String queueName) throws Exception {
-        Destination destination = brokerService.getDestination(new ActiveMQQueue((queueName)));
+        var destination = brokerService.getDestination(new ActiveMQQueue((queueName)));
         Assert.notNull(destination, "Queue " + queueName + " does not exist");
 
-        MessageStore messageStore = destination.getMessageStore();
+        var messageStore = destination.getMessageStore();
         Assert.notNull(messageStore, "Message store for " + queueName + " does not exist");
         return messageStore;
     }
 
     @Around("execution(* com.github.cdmatta.experiment.saf.dispatch.JmsEventListener.receive(javax.jms.TextMessage))")
     public Object recordMessageReceive(ProceedingJoinPoint pjp) throws Throwable {
-        long start = System.currentTimeMillis();
+        var start = System.currentTimeMillis();
         try {
-            Object result = pjp.proceed();
-            long end = System.currentTimeMillis();
+            var result = pjp.proceed();
+            var end = System.currentTimeMillis();
             successTimer.record(end - start, MILLISECONDS);
             return result;
         } catch (Throwable t) {
-            long end = System.currentTimeMillis();
+            var end = System.currentTimeMillis();
             Timer.builder("saf.dispatch")
                     .tag("outcome", "FAILURE")
                     .tag("exception", t.getClass().getSimpleName())

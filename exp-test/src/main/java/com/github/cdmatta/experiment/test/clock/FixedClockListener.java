@@ -8,14 +8,13 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.TimeZone;
 
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class FixedClockListener extends AbstractTestExecutionListener {
     @Override
     public void beforeTestClass(TestContext testContext) {
-        TestContextHelper contextHelper = new TestContextHelper(testContext);
-        FixedClock classFixedClock = contextHelper.getTestClassAnnotation(FixedClock.class);
+        var contextHelper = new TestContextHelper(testContext);
+        var classFixedClock = contextHelper.getTestClassAnnotation(FixedClock.class);
         if (classFixedClock == null) {
             return;
         }
@@ -24,8 +23,8 @@ public class FixedClockListener extends AbstractTestExecutionListener {
 
     @Override
     public void afterTestClass(TestContext testContext) {
-        TestContextHelper contextHelper = new TestContextHelper(testContext);
-        FixedClock annotation = contextHelper.getTestClassAnnotation(FixedClock.class);
+        var contextHelper = new TestContextHelper(testContext);
+        var annotation = contextHelper.getTestClassAnnotation(FixedClock.class);
         if (annotation == null) {
             return;
         }
@@ -34,8 +33,8 @@ public class FixedClockListener extends AbstractTestExecutionListener {
 
     @Override
     public void beforeTestMethod(TestContext testContext) {
-        TestContextHelper contextHelper = new TestContextHelper(testContext);
-        FixedClock methodFixedClock = contextHelper.getTestMethodAnnotation(FixedClock.class);
+        var contextHelper = new TestContextHelper(testContext);
+        var methodFixedClock = contextHelper.getTestMethodAnnotation(FixedClock.class);
         if (methodFixedClock == null) {
             return;
         }
@@ -45,26 +44,26 @@ public class FixedClockListener extends AbstractTestExecutionListener {
 
     @Override
     public void afterTestMethod(TestContext testContext) {
-        TestContextHelper contextHelper = new TestContextHelper(testContext);
-        FixedClock methodFixedClock = contextHelper.getTestMethodAnnotation(FixedClock.class);
+        var contextHelper = new TestContextHelper(testContext);
+        var methodFixedClock = contextHelper.getTestMethodAnnotation(FixedClock.class);
         if (methodFixedClock == null) {
             return;
         }
         verifyClassAnnotation(contextHelper);
 
-        FixedClock classFixedClock = contextHelper.getTestClassAnnotation(FixedClock.class);
+        var classFixedClock = contextHelper.getTestClassAnnotation(FixedClock.class);
         mockClock(contextHelper, classFixedClock);
     }
 
     private void verifyClassAnnotation(TestContextHelper helper) {
-        FixedClock classAnnotation = helper.getTestClassAnnotation(FixedClock.class);
+        var classAnnotation = helper.getTestClassAnnotation(FixedClock.class);
         if (classAnnotation == null) {
             throw new IllegalStateException("@FixedClock class level annotation is missing. Required to allow 'mock' clock bean injection.");
         }
     }
 
     private void mockClock(TestContextHelper helper, FixedClock fixedClock) {
-        Instant instant = Instant.parse(fixedClock.value());
+        var instant = Instant.parse(fixedClock.value());
         Clock mockedClock = helper.getBean(Clock.class);
         when(mockedClock.instant()).thenReturn(instant);
         when(mockedClock.getZone()).thenReturn(TimeZone.getDefault().toZoneId());

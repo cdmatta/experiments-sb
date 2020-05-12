@@ -37,7 +37,7 @@ public class BrokerConfiguration {
 
     @Bean(destroyMethod = "stop")
     BrokerService brokerService(SafProperties safProperties) throws Exception {
-        BrokerService broker = new BrokerService();
+        var broker = new BrokerService();
 
         broker.setBrokerName("saf-broker");
         broker.setUseJmx(false);
@@ -59,17 +59,17 @@ public class BrokerConfiguration {
     }
 
     private SystemUsage systemUsage(SafProperties safProperties) {
-        MemoryUsage memoryUsage = new MemoryUsage();
+        var memoryUsage = new MemoryUsage();
         memoryUsage.setPercentOfJvmHeap(safProperties.getBrokerMemoryPercentage());
 
-        SystemUsage systemUsage = new SystemUsage();
+        var systemUsage = new SystemUsage();
         systemUsage.setMemoryUsage(memoryUsage);
 
         return systemUsage;
     }
 
     private BrokerPlugin[] setupPlugins(BrokerService broker, SafProperties safProperties) throws Exception {
-        ArrayList<BrokerPlugin> plugins = new ArrayList<>(asList(nullToEmpty(broker.getPlugins(), BrokerPlugin[].class)));
+        var plugins = new ArrayList<>(asList(nullToEmpty(broker.getPlugins(), BrokerPlugin[].class)));
 
         plugins.add(authenticationPlugin(safProperties));
         plugins.add(authorizationPlugin(safProperties));
@@ -78,7 +78,7 @@ public class BrokerConfiguration {
     }
 
     private SimpleAuthenticationPlugin authenticationPlugin(SafProperties safProperties) {
-        SimpleAuthenticationPlugin plugin = new SimpleAuthenticationPlugin();
+        var plugin = new SimpleAuthenticationPlugin();
         List<AuthenticationUser> users = new ArrayList<>();
 
         users.add(new AuthenticationUser(
@@ -98,24 +98,25 @@ public class BrokerConfiguration {
         return plugin;
     }
 
+    @SuppressWarnings("rawtypes")
     private AuthorizationPlugin authorizationPlugin(SafProperties safProperties) throws Exception {
         List<DestinationMapEntry> authorizationEntries = new ArrayList<>();
 
-        AuthorizationEntry safQueueEntry = new AuthorizationEntry();
+        var safQueueEntry = new AuthorizationEntry();
         safQueueEntry.setQueue(DATA_QUEUE_NAME);
         safQueueEntry.setRead(ADMIN_GROUP);
         safQueueEntry.setWrite(PRODUCER_GROUP + "," + ADMIN_GROUP); // Anyone can dispatch a message
         safQueueEntry.setAdmin(ADMIN_GROUP);
         authorizationEntries.add(safQueueEntry);
 
-        AuthorizationEntry dlqEntry = new AuthorizationEntry();
+        var dlqEntry = new AuthorizationEntry();
         dlqEntry.setQueue(DLQ_NAME);
         dlqEntry.setRead(ADMIN_GROUP);
         dlqEntry.setWrite(ADMIN_GROUP);
         dlqEntry.setAdmin(ADMIN_GROUP);
         authorizationEntries.add(dlqEntry);
 
-        AuthorizationEntry advisoryEntry = new AuthorizationEntry();
+        var advisoryEntry = new AuthorizationEntry();
         advisoryEntry.setTopic("ActiveMQ.Advisory.>");
         advisoryEntry.setRead(PRODUCER_GROUP + "," + ADMIN_GROUP); // Advisory messages can be read by anyone
         advisoryEntry.setWrite(ADMIN_GROUP);
@@ -127,8 +128,8 @@ public class BrokerConfiguration {
 
     @Bean(destroyMethod = "stop")
     public PooledConnectionFactory pooledConnectionFactory(SafProperties safProperties) {
-        PooledConnectionFactory pooledConnectionFactory = new PooledConnectionFactory(connectionFactory(safProperties));
-        SafProperties.Pool pool = safProperties.getPool();
+        var pooledConnectionFactory = new PooledConnectionFactory(connectionFactory(safProperties));
+        var pool = safProperties.getPool();
         pooledConnectionFactory.setMaxConnections(pool.getMaxConnections());
         pooledConnectionFactory.setIdleTimeout((int) pool.getIdleTimeout().toMillis());
         pooledConnectionFactory.setExpiryTimeout(pool.getExpiryInMillisOrZero());
@@ -136,7 +137,7 @@ public class BrokerConfiguration {
     }
 
     private ActiveMQConnectionFactory connectionFactory(SafProperties safProperties) {
-        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
+        var connectionFactory = new ActiveMQConnectionFactory(
                 safProperties.getAdmin().getUsername(),
                 safProperties.getAdmin().getPassword(),
                 safProperties.getBrokerUrl()
@@ -147,7 +148,7 @@ public class BrokerConfiguration {
     }
 
     private RedeliveryPolicy redeliveryPolicy(SafProperties.RedeliveryPolicy policy) {
-        RedeliveryPolicy redeliveryPolicy = new RedeliveryPolicy();
+        var redeliveryPolicy = new RedeliveryPolicy();
         redeliveryPolicy.setInitialRedeliveryDelay(policy.getInitialRedeliveryDelay().toMillis());
         redeliveryPolicy.setMaximumRedeliveryDelay(policy.getMaxRedeliveryDelay().toMillis());
         redeliveryPolicy.setMaximumRedeliveries(policy.getMaximumRedeliveries());
@@ -162,7 +163,7 @@ public class BrokerConfiguration {
     public JmsListenerContainerFactory<?> jmsListenerContainerFactory(ConnectionFactory connectionFactory,
                                                                       DefaultJmsListenerContainerFactoryConfigurer configurer,
                                                                       SafProperties safProperties) {
-        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+        var factory = new DefaultJmsListenerContainerFactory();
 
         configurer.configure(factory, connectionFactory);
         factory.setErrorHandler(t -> log.warn("Failed to handle event", t));

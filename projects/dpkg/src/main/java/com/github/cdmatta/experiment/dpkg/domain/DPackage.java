@@ -25,9 +25,9 @@ public class DPackage {
 
     public void setDepends(String value) {
         depends = value;
-        String[] nameAndVersions = value.split(",|\\|");
-        for (String d : nameAndVersions) {
-            String name = substringBefore(trimToEmpty(d), " ");
+        var nameAndVersions = value.split(",|\\|");
+        for (var d : nameAndVersions) {
+            var name = substringBefore(trimToEmpty(d), " ");
             upstreamDependencies.put(name, false);
         }
     }

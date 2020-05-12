@@ -31,7 +31,7 @@ public class JmsEventListener {
             throw JmsUtils.convertJmsAccessException(e);
         }
 
-        String route = Optional.ofNullable(event.getStringProperty("ROUTING_KEY")).orElse(null);
+        var route = Optional.ofNullable(event.getStringProperty("ROUTING_KEY")).orElse(null);
         eventDispatcher.dispatch(route, eventString);
     }
 }

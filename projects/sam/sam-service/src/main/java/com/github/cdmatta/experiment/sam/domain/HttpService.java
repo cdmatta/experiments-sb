@@ -74,19 +74,19 @@ public class HttpService {
      */
     public boolean checkStatus(final int timeoutSeconds) {
         HttpURLConnection connection = null;
-        long startMillis = currentTimeMillis();
+        var startMillis = currentTimeMillis();
         InputStream inputStream = null;
         try {
             connection = openConnection(timeoutSeconds);
-            int responseCode = connection.getResponseCode();
+            var responseCode = connection.getResponseCode();
             if (responseCode != HTTP_OK) {
                 log.error("Result up=false url={} responseCode={}", url, responseCode);
                 lastFailureDetail = "Response code " + responseCode + " != HTTP OK/200";
                 return false;
             }
             inputStream = connection.getInputStream();
-            boolean contentIsValid = isInputStreamContentValid(inputStream);
-            long duration = currentTimeMillis() - startMillis;
+            var contentIsValid = isInputStreamContentValid(inputStream);
+            var duration = currentTimeMillis() - startMillis;
             log.info("Result url={} responseCode={} validContent={} took={} ms", url, responseCode,
                     contentIsValid, duration);
             lastFailureDetail = contentIsValid ? "" : "Page does not contain required text";
@@ -113,7 +113,7 @@ public class HttpService {
             return true;
         }
         try {
-            String htmlPage = trimToEmpty(IOUtils.toString(inputStream, Charset.defaultCharset()));
+            var htmlPage = trimToEmpty(IOUtils.toString(inputStream, Charset.defaultCharset()));
             return contains(htmlPage, mandatoryContent);
         } catch (IOException e) {
             throw new RuntimeException("Failed to read content", e);
@@ -121,8 +121,8 @@ public class HttpService {
     }
 
     protected HttpURLConnection openConnection(final int timeoutSeconds) throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        int timeoutMillis = timeoutSeconds * 1000;
+        var connection = (HttpURLConnection) url.openConnection();
+        var timeoutMillis = timeoutSeconds * 1000;
         connection.setConnectTimeout(timeoutMillis);
         connection.setReadTimeout(timeoutMillis);
         connection.connect();

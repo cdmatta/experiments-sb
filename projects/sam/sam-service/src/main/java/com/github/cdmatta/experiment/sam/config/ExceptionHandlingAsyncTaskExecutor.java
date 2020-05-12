@@ -18,7 +18,7 @@ public class ExceptionHandlingAsyncTaskExecutor implements AsyncTaskExecutor, In
     @Override
     public void afterPropertiesSet() throws Exception {
         if (executor instanceof InitializingBean) {
-            InitializingBean bean = (InitializingBean) executor;
+            var bean = (InitializingBean) executor;
             bean.afterPropertiesSet();
         }
     }
@@ -26,7 +26,7 @@ public class ExceptionHandlingAsyncTaskExecutor implements AsyncTaskExecutor, In
     @Override
     public void destroy() throws Exception {
         if (executor instanceof DisposableBean) {
-            DisposableBean bean = (DisposableBean) executor;
+            var bean = (DisposableBean) executor;
             bean.destroy();
         }
     }
