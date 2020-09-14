@@ -6,8 +6,8 @@ ext {
     commonsIoVersion = '2.6'
     lombokVersion = '1.18.12' // For annotation processing
     restAssuredVersion = '4.3.0' // default restassured in spring-boot uses groovy 2.X causing warning in java 11
-    springBootVersion = '2.2.7.RELEASE'
-    springCloudVersion = 'Hoxton.SR4'
+    springBootVersion = '2.3.3.RELEASE'
+    springCloudVersion = 'Hoxton.SR8'
 }
 
 allprojects {
